@@ -25,7 +25,7 @@ int compareCards(const void *a, const void *b) {
     if (cardA->value != cardB->value) {
         return cardA->value - cardB->value;
     } else {
-        return cardA->suit - cardB->suit;
+        return strcmp (cardA->suit - cardB->suit);
     }
 }
 
