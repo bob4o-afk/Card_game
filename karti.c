@@ -18,8 +18,8 @@ struct Player {
 };
 
 int compareCards(const void *a, const void *b) {
-    struct Card *cardA = (struct Card *)a;
-    struct Card *cardB = (struct Card *)b;
+    const struct Card *cardA = (const struct Card *)a;
+    const struct Card *cardB = (const struct Card *)b;
 
     if (cardA->value != cardB->value) {
         return cardA->value - cardB->value;
@@ -51,9 +51,9 @@ int main() {
     }
 
     for (i = 0; i < NUM_CARDS; i++) {
-        char value[3]; 
+        char value[3];
         fscanf(file, "%s %c", value, &deck[i].suit);
-        deck[i].value = atoi(value); 
+        deck[i].value = atoi(value);
     }
     fclose(file);
 
@@ -64,13 +64,12 @@ int main() {
         currentPlayer->numCards++;
 
         if (currentPlayer->numCards >= 4) {
-      
-            qsort(currentPlayer->hand, currentPlayer->numCards, sizeof(struct Card), compareCards);
+          qsort(currentPlayer->hand, currentPlayer->numCards, sizeof(struct Card), compareCards);
 
             for (i = 0; i <= currentPlayer->numCards - 4; i++) {
-                if (currentPlayer->hand[i].value == currentPlayer->hand[i + 3].value) {
-                    winner = turn % NUM_PLAYERS;
-                    break;
+              if (currentPlayer->hand[i].value == currentPlayer->hand[i + 3].value) {
+                winner = turn % NUM_PLAYERS;
+                break;
                 }
             }
         }
@@ -79,11 +78,10 @@ int main() {
     }
 
     if (winner == -1) {
-      
         int maxTotal = -1;
         int maxSuitStrength = -1;
 
-        for (i = 0; i < NUM_PLAYERS; i++) {
+          for (i = 0; i < NUM_PLAYERS; i++) {
             struct Player *currentPlayer = &players[i];
             int total = 0;
             int suitStrength = -1;
@@ -107,10 +105,12 @@ int main() {
         printf("Player %d wins: ", winner + 1);
 
         struct Player *winningPlayer = &players[winner];
-        for (i = 0; i < winningPlayer->numCards; i++) {
-            printf("(%d, %c) ", winningPlayer->hand[i].value, winningPlayer->hand[i].suit);
-        }
-        printf("\n");
+          for (i = 0; i < winningPlayer->numCards; i++) {
+          printf("(%d, %c) ", winningPlayer->hand[i].value, winningPlayer->hand[i].suit);
+    }
+          printf("\n");
+    } else {
+        printf("No winner.\n");
     }
 
     return 0;
