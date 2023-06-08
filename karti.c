@@ -22,10 +22,10 @@ int compareCards(const void *a, const void *b) {
     const struct Card *cardA = (const struct Card *)a;
     const struct Card *cardB = (const struct Card *)b;
 
-    if (cardA->value != cardB->value) {
+   if (cardA->value != cardB->value) {
         return cardA->value - cardB->value;
     } else {
-        return strcmp (cardA->suit - cardB->suit);
+        return cardA->suit - cardB->suit;
     }
 }
 
