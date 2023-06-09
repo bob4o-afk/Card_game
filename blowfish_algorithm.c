@@ -29,6 +29,31 @@ void blowfish_encrypt(uint32_t *xl, uint32_t *xr,  uint32_t *P, uint32_t (*S)[25
   *xr = Xr;
 }
 
+// Blowfish decryption
+void blowfish_decrypt(uint32_t *xl, uint32_t *xr,  uint32_t *P, uint32_t (*S)[256]) {
+  uint32_t Xl = *xl;
+  uint32_t Xr = *xr;
+  uint32_t temp;
+  size_t i;
+
+  for (i = 17; i > 1; --i) {
+    Xl ^= P[i];
+    Xr ^= Feistel(Xl, S);
+    temp = Xl;
+    Xl = Xr;
+    Xr = temp;
+  }
+
+  temp = Xl;
+  Xl = Xr;
+  Xr = temp;
+  Xr ^= P[1];
+  Xl ^= P[0];
+
+  *xl = Xl;
+  *xr = Xr;
+}
+
 // Blowfish key schedule
 void blowfish_key_schedule(uint32_t *P, uint32_t *S, const uint8_t *key,
                            size_t key_len) {
@@ -349,13 +374,30 @@ void encrypt_file(const char *input_file, const char *output_file,
   printf("Encryption completed. Output file: %s\n", output_file);
 }
 
-// main
-int main() {
-  const char *input_file = "kartiprimer1.txt";
-  const char *output_file = "output.txt";
-  const char *key = "7Hs9@*eFpXq#2v";
+// Decrypt the cards file using Blowfish algorithm
+void decrypt_file(const char *input_file, const char *output_file,
+                  const char *key) {
+  // Convert key string to uint8_t array
+  size_t key_length = strlen(key);
+  size_t key_size = (key_length + 3) / 4 * 4;  // Round up to the nearest multiple of 4
+  uint8_t key_data[key_size];
+  memcpy(key_data, key, key_length);
 
-  encrypt_file(input_file, output_file, key);
+  // Initialize Blowfish algorithm
+  uint32_t P[18];
+  uint32_t S[4][256];
+  blowfish_key_schedule(P, S, key_data, key_size);
 
-  return 0;
+  // Decrypt file
+  FILE *input = fopen(input_file, "rb");
+  FILE *output = fopen(output_file, "wb");
+  uint32_t xl, xr;
+  while (fread(&xl, sizeof(uint32_t), 1, input) == 1 &&
+         fread(&xr, sizeof(uint32_t), 1, input) == 1) {
+    blowfish_decrypt(&xl, &xr, P, S);
+    fwrite(&xl, sizeof(uint32_t), 1, output);
+    fwrite(&xr, sizeof(uint32_t), 1, output);
+  }
+  fclose(input);
+  fclose(output);
 }
