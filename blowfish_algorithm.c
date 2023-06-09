@@ -351,7 +351,7 @@ void encrypt_file(const char *input_file, const char *output_file,
 
 // main
 int main() {
-  const char *input_file = "karti.txt";
+  const char *input_file = "kartiprimer1.txt";
   const char *output_file = "output.txt";
   const char *key = "7Hs9@*eFpXq#2v";
 
