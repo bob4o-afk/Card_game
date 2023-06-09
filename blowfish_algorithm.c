@@ -5,8 +5,7 @@
 #include "blowfish_algorithm.h"
 
 // Blowfish encryption
-void blowfish_encrypt(uint32_t *xl, uint32_t *xr, const uint32_t *P,
-                      const uint32_t (*S)[256]) {
+void blowfish_encrypt(uint32_t *xl, uint32_t *xr,  uint32_t *P, uint32_t (*S)[256]) {
   uint32_t Xl = *xl;
   uint32_t Xr = *xr;
   uint32_t temp;
@@ -277,8 +276,8 @@ void blowfish_key_schedule(uint32_t *P, uint32_t *S, const uint8_t *key,
     for (j = 0; j < 256; j += 2) {
       blowfish_encrypt(&datal, &datar, P, S);
 
-      S[i][j] = datal;
-      S[i][j + 1] = datar;
+      S[i] = datal;
+      S[i] = datar;
     }
   }
 }
@@ -352,7 +351,7 @@ void encrypt_file(const char *input_file, const char *output_file,
 
 // main
 int main() {
-  const char *input_file = "kartipartibelot (1).txt";
+  const char *input_file = "karti.txt";
   const char *output_file = "output.txt";
   const char *key = "7Hs9@*eFpXq#2v";
 
