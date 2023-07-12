@@ -34,8 +34,6 @@ To run the card game with Blowfish encryption, follow these steps:
 4. Follow the instructions displayed to play the game.
 5. The winning player and their cards will be printed as the output.
 
-Note: Make sure to use the correct Blowfish encryption key to decrypt the deck file before playing the game.
-
 Feel free to contribute to this repository by enhancing the game mechanics, improving encryption features, or adding new functionalities.
 
 Enjoy the card game and have a great time!
