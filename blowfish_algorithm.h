@@ -1,8 +1,13 @@
-#include <stdint.h>
-#include <stdio.h>
+#include <inttypes.h>
 
-void blowfish_encrypt(uint32_t *xl, uint32_t *xr,  uint32_t *P, uint32_t (*S)[256]);
-void blowfish_key_schedule(uint32_t *P, uint32_t *S, const uint8_t *key,size_t key_len);
-uint32_t Feistel(uint32_t x, const uint32_t (*S)[256]);
+typedef struct {
+    uint32_t P[16 + 2];
+    uint32_t S[4][256];
+} BLOWFISH_CTX;
+
+void Blowfish_Init(BLOWFISH_CTX *ctx, uint8_t *key, int32_t keyLen);
+void Blowfish_Encrypt(BLOWFISH_CTX *ctx, uint32_t *xl, uint32_t *xr);
+void Blowfish_Decrypt(BLOWFISH_CTX *ctx, uint32_t *xl, uint32_t *xr);
+
 void encrypt_file(const char *input_file, const char *output_file, const char *key);
 void decrypt_file(const char *input_file, const char *output_file, const char *key);
