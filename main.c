@@ -1,18 +1,26 @@
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stddef.h>
 
-#include "blowfish_algorithm.h"
+#include "blowfish.h"
 #include "karti.h"
 
-// main
-int main() {
-  const char *input_file = "output.txt";
-  const char *output_file = "output2.txt";
-  const char *usable_file = "karti.txt";
-  const char *key = "7Hs9@*eFpXq#2v";
+#define MAX_FILENAME_LENGTH 100
 
-  
-  decrypt_file(input_file, output_file,  key);
+int main() {
+  const char *input_file = "karti.txt";
+  const char *encrypted_file = "encrypted_file.txt";
+  const char *decrypted_file = "decrypted_file.txt";
+  char* key = NULL;
+  size_t key_length = 0;
+
+  printf("Enter the encryption key: ");
+  getline(&key, &key_length, stdin);
+  key[strcspn(key, "\n")] = '\0';
+
+  encrypt_file(input_file, encrypted_file, key);
+  decrypt_file(encrypted_file, decrypted_file, key);
 
   struct Player players[NUM_PLAYERS];
   struct Card deck[NUM_CARDS];
@@ -22,11 +30,11 @@ int main() {
   int turn = 0;
   int i, j;
 
-  //printf("Enter a file name to open: ");
-  //scanf("%s", filename);
+  printf("Enter a file name to open: ");
+  scanf("%s", filename);  //Enter either "karti.txt" or "decrypted_file.txt"
   
   //open the file for reading
-  file = fopen(usable_file, "r");
+  file = fopen(filename, "r");
   if (file == NULL) {
       printf("Error opening file.\n");
       return 1;
@@ -108,5 +116,6 @@ int main() {
   }
 
 
+  free(key);
   return 0;
 }
